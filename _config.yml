@@ -79,7 +79,7 @@ netease_comment: false
 # Sidebar settings
 sidebar: true                           # whether or not using Sidebar.
 sidebar-about-description: "生命就得不断的折腾，无聊时候也不能虚度光阴。<br/> 快乐每一天，幸福到永远。"
-sidebar-avatar: /img/avatar-hux-ny.jpg      # use absolute URL, seeing it's used in both `/` and `/about/`
+sidebar-avatar: /img/avatar-liu-ny.jpg      # use absolute URL, seeing it's used in both `/` and `/about/`
 
 
 
