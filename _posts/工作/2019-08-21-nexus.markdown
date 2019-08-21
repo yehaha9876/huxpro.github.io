@@ -72,14 +72,19 @@ service nexus start
 ```
 
 配置ldap：
+
 如图：
+
 ![work_nexus3_ldap](/_posts/images/work_nexus3_ldap.png)
 
 
 配置maven
 有两种方式，一种使设置mavn系统级别代理，第二种是针对项目
+
+
 第一种：
-vi 
+
+vi maven_install/dir/config/setting.xml 
 ```
  <servers>
     <!-- 增加开始 -->
