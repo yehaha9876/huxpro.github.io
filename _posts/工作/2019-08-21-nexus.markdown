@@ -73,7 +73,7 @@ service nexus start
 
 配置ldap：
 如图：
-![work_nexus3_ldap](/images/work_nexus3_ldap.jpg)
+![work_nexus3_ldap](_posts/images/work_nexus3_ldap.png)
 
 
 配置maven
