@@ -1,0 +1,105 @@
+## 安装
+下载包
+```
+wget https://sonatype-download.global.ssl.fastly.net/nexus/3/latest-unix.tar.gz
+```
+
+解压
+```
+tar xzvf nexus-3.18.1-01-unix.tar.gz
+```
+
+安装jdk
+vi .bashrc
+```
+export JAVA_HOME=/root/jdk1.8.0_181
+export JRE_HOME=${JAVA_HOME}/jre
+export CLASSPATH=.:${JAVA_HOME}/lib:${JRE_HOME}/lib
+export PATH=${JAVA_HOME}/bin:$PATH
+```
+
+## 配置nexus
+cd nexus-3.18.1-01-unix
+
+### 配置javahome
+vi bin/nexus
+```
+INSTALL4J_JAVA_HOME_OVERRIDE="/root/jdk1.8.0_181"
+```
+
+### 配置运行用户：
+vi bin/nexus.rc
+```
+run_as_user="root"
+```
+
+### 配置service：
+```
+ln -s /root/nexus-3.18.1-01/bin/nexus /etc/init.d/nexus
+chkconfig --add nexus
+chkconfig --levels 345 nexus on
+```
+
+### 配置https
+vi etc/nexus-default.properties
+```
+# 新增
+application-port-ssl=443  
+
+# 修改
+application-port=80
+nexus-args=${jetty.etc}/jetty.xml,${jetty.etc}/jetty-http.xml,${jetty.etc}/jetty-requestlog.xml,${jetty.etc}/jetty-https.xml
+```
+
+在etc/ssl下创建证书
+```
+keytool -genkeypair -keystore keystore.jks -storepass nexus3 -keypass nexus3 -alias jetty -keyalg RSA -keysize 2048 -validity 5000 -dname "CN=*.nexus.embracesource.com, OU=nexus, O=embracesource,L=Unspecified, ST=Unspecified, L=Beijing, C=CN" -ext "SAN=DNS:nexus.embracesource.com,IP:192.168.2.78" -ext "BC=ca:true"
+```
+
+vi etc/jetty/jetty-https.xml
+```  
+    # 修改这几项的password
+    <Set name="KeyStorePassword">nexus3</Set>
+    <Set name="KeyManagerPassword">nexus3</Set>
+    <Set name="TrustStorePath"><Property name="ssl.etc"/>/keystore.jks</Set>
+    <Set name="TrustStorePassword">nexus3</Set>
+
+```
+
+启动
+```
+service nexus start
+```
+
+配置ldap：
+如图：
+![work_nexus3_ldap](/images/work_nexus3_ldap.jpg)
+
+
+配置maven
+有两种方式，一种使设置mavn系统级别代理，第二种是针对项目
+第一种：
+vi 
+```
+ <servers>
+    <!-- 增加开始 -->
+    <server>
+      <id>nexus</id>
+      <username>用户名</username>
+      <password>密码</password>
+    </server>
+    <!-- 增加结束 -->
+  </servers>
+  <mirrors>
+    <!-- 增加开始 -->
+  	<mirror>
+      <id>nexus</id>
+      <mirrorOf>*</mirrorOf>
+      <name>Human Readable Name for this Mirror.</name>
+      <url>http://192.168.2.78:8081/repository/maven-public/</url>
+    </mirror>
+    <!-- 增加结束 -->
+  </mirrors>
+```
+
+ok大功告成
