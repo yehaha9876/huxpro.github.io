@@ -1,3 +1,17 @@
+---
+layout:     post
+title:      "nexus 学习"
+subtitle:   "nexus 学习、使用过程。"
+date:       2019-08-16 18:00:00
+author:     "yehaha9876"
+header-img: "img/post-bg-2015.jpg"
+catalog: true
+tags:
+    - 工作
+    - 学习
+---
+
+
 ## 安装
 下载包
 ```
@@ -78,7 +92,12 @@ service nexus start
 ![work_nexus3_ldap](/_posts/images/work_nexus3_ldap.png)
 
 
-配置maven
+配置权限；
+```
+请在realms里active所有权限
+```
+
+### 配置maven
 有两种方式，一种使设置mavn系统级别代理，第二种是针对项目
 
 
@@ -106,5 +125,34 @@ vi maven_install/dir/config/setting.xml
     <!-- 增加结束 -->
   </mirrors>
 ```
+
+### nodejs使用
+配置本地npm环境
+
+####  安装nrm
+执行下面命令
+```
+npm install nrm
+
+# 增加源
+nrm add gzky https://192.168.2.78/repository/npm-proxy/
+# 使用源
+nrm use gzky
+#查看是否应用
+nrm ls
+# 配置ssl
+npm config set strict-ssl false
+```
+####  登录
+```
+# 登录
+nrm login 
+# 测试：
+nrm install nvm
+```
+
+### docker 使用
+
+
 
 ok大功告成
